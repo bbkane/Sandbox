@@ -1,0 +1,2 @@
+LogMacro.cpp 12 main
+LogMacro.cpp 7 log
