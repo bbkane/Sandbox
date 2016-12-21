@@ -10,7 +10,7 @@ project(_Sandbox)
 if(MSVC)
     add_compile_options(/W4 /wd4100)
 else(MSVC)
-    add_compile_options(-std=c++1y -Wall -Wextra -pedantic -Wno-unused-parameter)
+    add_compile_options(-std=c++1y -Wall -Wextra -pedantic -O3 -Wno-unused-parameter)
     # add_compile_options(-save-temps)
     # broken...
     # add_compile_options(-S -emit-llvm)
