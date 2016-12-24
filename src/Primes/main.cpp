@@ -5,6 +5,25 @@
 #include <vector>
 #include <string>
 
+//http://stackoverflow.com/a/14966637/2958070
+FILE* open_file()
+{
+    FILE* fp;
+    const char* file_name = "out_file.txt";
+#ifdef _WIN32
+    errno_t err;
+    if ((err = fopen_s(&fp, file_name, "w")) != 0)
+    {
+#else
+    if ((fp = fopen(file_name, "w")) == NULL)
+    {
+#endif
+        fprintf(stderr, "cannot open file %s!\n", file_name);
+        exit(1);
+    }
+    return fp;
+}
+
 size_t get_number()
 {
     size_t number = 0;
@@ -32,7 +51,7 @@ void print_numbers(const std::vector<bool>& numbers)
 
 void print_to_file(const std::vector<bool>& numbers)
 {
-    FILE* fp = fopen("out_file.txt", "w");
+    FILE* fp = open_file();
 
     for (size_t i = 0; i < numbers.size(); i++)
     {
@@ -50,7 +69,8 @@ int main(int argc, char** argv)
 
     char * end = nullptr;
     // max number is 18446744073709551615
-    size_t number = static_cast<size_t>(strtoul(argv[1], &end, 10));
+    // size_t number = static_cast<size_t>(strtoul(argv[1], &end, 10));
+    size_t number = get_number();
     size_t size = number + 1;
 
     if (number < 2)
@@ -70,6 +90,7 @@ int main(int argc, char** argv)
     numbers[0] = false;
     numbers[1] = false;
 
+    // TODO: special case for 2 and 3, then increment by 6 and test for 6k +- 1
     size_t prime = 2;
     while (prime < size)
     {
@@ -79,8 +100,8 @@ int main(int argc, char** argv)
         }
         ++prime;
         // TODO: if I increment by 2 here, I skip numbers like 25. Why?
-        while(!numbers[prime] && prime < size) { prime += 1; }
+        while(prime < size && !numbers[prime]) { prime += 1; }
     }
-    // print_numbers(numbers);
-    print_to_file(numbers);
+    print_numbers(numbers);
+    //print_to_file(numbers);
 }

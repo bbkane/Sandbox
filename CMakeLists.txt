@@ -7,13 +7,14 @@ cmake_minimum_required(VERSION 3.0)
 project(_Sandbox)
 
 # add warnings to all projects
-if(MSVC)
-    add_compile_options(/W4 /wd4100)
-else(MSVC)
-    add_compile_options(-std=c++1y -Wall -Wextra -pedantic -O3 -Wno-unused-parameter)
-    # add_compile_options(-save-temps)
-    # broken...
-    # add_compile_options(-S -emit-llvm)
+if (MSVC)
+    add_compile_options(/W4)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    add_compile_options(-std=c++1y -Wall -Wextra -pedantic -O3)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options(-std=c++14 -Wall -Wextra -pedantic -O3)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-std=c++14 -Wall -Wextra -pedantic -O3)
 endif(MSVC)
 
 # set output for all projects
